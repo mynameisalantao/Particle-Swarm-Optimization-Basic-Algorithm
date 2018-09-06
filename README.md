@@ -37,7 +37,8 @@ swarm(:,5)=0;                           % 初始的u方向速度
 swarm(:,6)=0;                           % 初始的v方向速度
 
 </pre></code>
-
+初始呈現均勻散布
+[!Imgur](https://i.imgur.com/pwWXaRK.png)
 接著進入迭代部分<br/>
 <br/>
 此處的適應函數為f(u,v)=(u-30)^2+(v-30)^2，不斷帶入適應解(u,v)來得到更小的適應值f(u,v) <br/>
