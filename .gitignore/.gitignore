@@ -1,0 +1,53 @@
+%% 粒子群最佳化(PSO)
+clear;clc;
+%% 初始化參數
+iterations=30; %要進行迭代的次數
+inertia=1.0;   %慣性(會與前一次的速度相乘)
+correction_factor=1.0;   %粒子個體與群體最佳解的權重
+swarms=100;   %總粒子數量
+%% 初始化粒子位置、速度與適應值
+swarm=zeros(swarms,7);   %先配置足夠的矩陣空間來儲存每個粒子的資訊
+
+%將每個粒子的(u,v)初始位置完全採用亂數[0,50]
+for i=1:swarms
+    for j=1:2
+        swarm(i,j)=rand()*50;
+        %先將目前最佳(u,v)值預設為初始(u,v)值
+        swarm(i,j+2)=swarm(i,j);
+    end
+end
+
+swarm(:,7)=10000;                       % 初始的適應值
+swarm(:,5)=0;                           % 初始的u方向速度
+swarm(:,6)=0;                           % 初始的v方向速度
+%%  迭代 會進行iterations次
+for times = 1 : iterations
+    %每個粒子依序進行位置更新
+    for i = 1 : swarms
+        swarm(i,1)=swarm(i,1)+swarm(i,5)/1.2;     % 更新u方向的位置(加上目前u方向的速度)
+        swarm(i,2)=swarm(i,2)+swarm(i,6)/1.2;     % 更新v方向的位置(加上目前v方向的速度)
+        u=swarm(i,1);
+        v=swarm(i,2);
+        
+        value=(u-30)^2+(v-30)^2;                  % 適應函數
+        % 如果目前的粒子(u,v)帶入適應函數得到比目前最佳適應值更小(佳)的適應值，則更新目前最佳適應解與目前最佳適應值
+        if value < swarm(i,7)                     
+            swarm(i,3)=swarm(i,1);                % 更新目前最佳適應解u
+            swarm(i,4)=swarm(i,2);                % 更新目前最佳適應解v
+            swarm(i,7)=value;                     % value為目前最佳適應值
+        end
+    end
+    
+    [temp,gbest]=min(swarm(:,7));                 % 從每個粒子的目前最佳適應值中，找出全域目前最佳適應值
+    
+    %根據每個粒子的目前位置、目前速度、目前最佳適應解與全域目前最佳適應值，來計算下一刻粒子的速度
+    for i= 1:swarms
+        swarm(i,5)=rand*inertia*swarm(i,5)+correction_factor*rand*(swarm(i,3)-swarm(i,1))+correction_factor*rand*(swarm(gbest,3)-swarm(i,1));   % 下一刻粒子u方向的速度
+        swarm(i,6)=rand*inertia*swarm(i,6)+correction_factor*rand*(swarm(i,4)-swarm(i,2))+correction_factor*rand*(swarm(gbest,4)-swarm(i,2));   % 下一刻粒子v方向的速度
+    end
+       %%  印出圖片
+    plot(swarm(:,1),swarm(:,2), 'x') 
+    axis([0 60 0 60])
+    pause(.3)  %延遲0.3秒，方便觀察
+
+end
