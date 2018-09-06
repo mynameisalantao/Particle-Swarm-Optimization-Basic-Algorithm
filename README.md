@@ -94,3 +94,5 @@ swarm(gbest,3)-swarm(i,1)與swarm(gbest,4)-swarm(i,2) <br/>
         swarm(i,6)=rand*inertia*swarm(i,6)+correction_factor*rand*(swarm(i,4)-swarm(i,2))+correction_factor*rand*(swarm(gbest,4)-swarm(i,2));   % 下一刻粒子v方向的速度
     end
 </pre></code>
+最後可以觀察到每個粒子幾乎都到(30,30)附近了
+![Imgur](https://i.imgur.com/8MeWc9a.png)
